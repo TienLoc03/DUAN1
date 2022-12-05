@@ -26,8 +26,6 @@ public class TaiKhoan {
         this.loaiTK = loaiTK;
     }
 
-    
-
     public String getMaNV() {
         return maNV;
     }
@@ -67,5 +65,7 @@ public class TaiKhoan {
     public void setLoaiTK(String loaiTK) {
         this.loaiTK = loaiTK;
     }
+
+    
 
 }

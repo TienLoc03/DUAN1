@@ -6,12 +6,18 @@ package repositories;
 
 import domainModels.TaiKhoan;
 import java.util.ArrayList;
+import viewModels.TaiKhoanResponse;
 
 /**
  *
  * @author ASUS
  */
 public interface TaiKhoanRepository {
-    ArrayList<TaiKhoan> getAll();
+    ArrayList<TaiKhoanResponse> getAll();
     
+    boolean add(TaiKhoan taiKhoan);
+
+    boolean update(String MaNV, TaiKhoan taiKhoan);
+
+    boolean delete(String MaNV);
 }

@@ -9,17 +9,46 @@ import java.util.ArrayList;
 import repositories.TaiKhoanRepository;
 import repositories.impl.TaiKhoanRepositoryImpl;
 import services.TaiKhoanService;
+import viewModels.TaiKhoanResponse;
 
 /**
  *
  * @author ASUS
  */
-public class TaiKhoanServiceImpl implements TaiKhoanService{
+public class TaiKhoanServiceImpl implements TaiKhoanService {
+
     TaiKhoanRepository TKRepo = new TaiKhoanRepositoryImpl();
 
     @Override
-    public ArrayList<TaiKhoan> getAll() {
+    public ArrayList<TaiKhoanResponse> getAll() {
         return TKRepo.getAll();
     }
-    
+
+    @Override
+    public String add(TaiKhoan taiKhoan) {
+        if (TKRepo.add(taiKhoan)) {
+            return "Thành công";
+        } else {
+            return "Thất bại";
+        }
+    }
+
+    @Override
+    public String update(String MaNV, TaiKhoan taiKhoan) {
+        if (TKRepo.update(MaNV, taiKhoan)) {
+            return "Thành công";
+        } else {
+            return "Thất bại";
+        }
+    }
+
+    @Override
+    public String delete(String MaNV) {
+        if (TKRepo.delete(MaNV)) {
+            return "Thành công";
+        } else {
+            return "Thất bại";
+        }
+    }
+
 }

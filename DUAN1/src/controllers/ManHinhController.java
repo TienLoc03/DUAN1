@@ -13,11 +13,11 @@ import java.util.List;
 import views.TrangChu;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import views.DSBan;
-import views.DatBan;
+import views.BanHang;
 import views.DoanhThu;
-import views.HoaDon;
 import views.KhuyenMai;
+import views.Account;
+import views.QLHoaDon;
 import views.QLNV;
 import views.ThucDon;
 
@@ -75,11 +75,8 @@ public class ManHinhController {
                 case"ThucDon":
                     node = new ThucDon();
                     break;
-                case"DatBan":
-                    node = new DatBan();
-                    break;
-                case"HoaDon":
-                    node = new HoaDon();
+                case"BanHang":
+                    node = new BanHang();
                     break;
                 case"DoanhThu":
                     node = new DoanhThu();
@@ -87,11 +84,14 @@ public class ManHinhController {
                 case"QLNV":
                     node = new QLNV(); 
                     break;
-                case"DSBan":
-                    node = new DSBan();
-                    break;
                 case"KhuyenMai":
                     node = new KhuyenMai();
+                    break;
+                case"TaiKhoan":
+                    node = new Account();
+                    break;
+                case"HoaDon":
+                    node = new QLHoaDon();
                     break;
                 // more
                 default:

@@ -4,12 +4,17 @@
  */
 package application;
 
+import views.Login;
+
 /**
  *
  * @author ASUS
  */
 public class NewClass {
+
+    public static utilies.clsConnectDB connection = new utilies.clsConnectDB();
     public static void main(String[] args) {
-        new views.KhuyenMai().setVisible(true);
+        Login l = new Login();
+        l.setVisible(true);
     }
 }

@@ -1,6 +1,5 @@
 package views;
 
-import domainModels.TaiKhoan;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,6 +11,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import services.TaiKhoanService;
 import services.impl.TaiKhoanServiceImpl;
+import viewModels.TaiKhoanResponse;
 
 /**
  *
@@ -19,15 +19,16 @@ import services.impl.TaiKhoanServiceImpl;
  */
 public class Login extends javax.swing.JFrame {
 
-    private ArrayList<TaiKhoan> listTaiKhoans = new ArrayList<>();
+    private ArrayList<TaiKhoanResponse> listTaiKhoanResponses = new ArrayList<>();
     private TaiKhoanService taiKhoanService = new TaiKhoanServiceImpl();
+    
 
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
-        listTaiKhoans = taiKhoanService.getAll();
+        listTaiKhoanResponses = taiKhoanService.getAll();
         setTitle("Đăng nhập");
         this.setLocation(300, 200);
         File file = new File("luumk.txt");
@@ -47,16 +48,14 @@ public class Login extends javax.swing.JFrame {
             }
 
         } catch (FileNotFoundException ex) {
-            System.out.println("không tìm thấy file lưu mk");
+            ex.printStackTrace();
         }
 
         txtUserName.setText(tendangnhap);
         txtPassword.setText(matkhau);
         if (!tendangnhap.equals("")) {
             chkbNhoMatKhau.setSelected(rootPaneCheckingEnabled);
-            System.out.println("Đã chọn lưu mật khẩu");
         } else {
-            System.out.println("Đã bỏ checkbox lưu mật khẩu");
         }
     }
 
@@ -68,7 +67,7 @@ public class Login extends javax.swing.JFrame {
     }
 
     public String checkLogin(String username, String password) {
-        for (TaiKhoan u : listTaiKhoans) {
+        for (TaiKhoanResponse u : listTaiKhoanResponses) {
             if (u.getTk().equals(username) && u.getMk().equals(password)) {
                 return u.getLoaiTK();
             }
@@ -94,6 +93,7 @@ public class Login extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txtPassword = new javax.swing.JPasswordField();
         chkbNhoMatKhau = new javax.swing.JCheckBox();
+        btnQuenMk = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -112,7 +112,7 @@ public class Login extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(49, 139, 130));
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/password1_28px.png"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/password_28px.png"))); // NOI18N
 
         btnDangNhap.setBackground(new java.awt.Color(49, 139, 130));
         btnDangNhap.setForeground(new java.awt.Color(255, 255, 255));
@@ -141,6 +141,19 @@ public class Login extends javax.swing.JFrame {
         chkbNhoMatKhau.setForeground(new java.awt.Color(49, 139, 130));
         chkbNhoMatKhau.setText("Lưu mật khẩu");
 
+        btnQuenMk.setForeground(new java.awt.Color(49, 139, 130));
+        btnQuenMk.setText("Quên mật khẩu");
+        btnQuenMk.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnQuenMkMouseClicked(evt);
+            }
+        });
+        btnQuenMk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQuenMkActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -160,34 +173,41 @@ public class Login extends javax.swing.JFrame {
                         .addGap(37, 37, 37)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(chkbNhoMatKhau))))
-                .addContainerGap(24, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(chkbNhoMatKhau)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnQuenMk))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addComponent(jLabel3))
+                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addGap(22, 22, 22)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
+                .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addGap(47, 47, 47)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(46, 46, 46)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2)
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkbNhoMatKhau)
+                .addGap(7, 7, 7)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chkbNhoMatKhau)
+                    .addComponent(btnQuenMk, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(135, Short.MAX_VALUE))
+                .addContainerGap(127, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(303, 0, 350, 410));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 0, 400, 410));
 
         jLabel6.setBackground(new java.awt.Color(255, 239, 236));
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/306x410.jpg"))); // NOI18N
@@ -206,11 +226,9 @@ public class Login extends javax.swing.JFrame {
         if (chkbNhoMatKhau.isSelected()) {
             luutdn = txtUserName.getText();
             luumk = txtPassword.getText();
-            System.out.println("lưu mật khẩu");
         } else {
             luutdn = "";
             luumk = "";
-            System.out.println("không lưu mật khẩu");
         }
         try {
             File file = new File("luumk.txt");
@@ -222,7 +240,6 @@ public class Login extends javax.swing.JFrame {
             bw.write(luutdn + "\n" + luumk);
             bw.close();
             if (chkbNhoMatKhau.isSelected()) {
-                System.out.println("lưu phiên đăng nhập thành công");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -234,10 +251,10 @@ public class Login extends javax.swing.JFrame {
             if (role != null) {
                 JOptionPane.showMessageDialog(this, "Login Succesfully");
                 if (role.equalsIgnoreCase("NV")) {
-                    NhanVien nv = new NhanVien();
+                    QLNhanVien nv = new QLNhanVien();
                     nv.setVisible(true);
                 } else if (role.equalsIgnoreCase("QL")) {
-                    QuanLy QL = new QuanLy();
+                    QLQuanLy QL = new QLQuanLy();
                     QL.setVisible(true);
                 }
                 this.dispose();
@@ -255,6 +272,16 @@ public class Login extends javax.swing.JFrame {
             System.exit(0);
         }
     }//GEN-LAST:event_btnThoatMouseClicked
+
+    private void btnQuenMkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnQuenMkMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnQuenMkMouseClicked
+
+    private void btnQuenMkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuenMkActionPerformed
+        SendCode s = new SendCode();
+        s.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnQuenMkActionPerformed
 
     /**
      * @param args the command line arguments
@@ -293,6 +320,7 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDangNhap;
+    private javax.swing.JButton btnQuenMk;
     private javax.swing.JButton btnThoat;
     private javax.swing.JCheckBox chkbNhoMatKhau;
     private javax.swing.JLabel jLabel1;
