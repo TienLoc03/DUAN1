@@ -29,11 +29,29 @@ public class KhuyenMai extends javax.swing.JPanel {
         initComponents();
         listKhuyenMaiResponses = khuyenMaiService.getAll();
         showData(listKhuyenMaiResponses);
+        disabled();
     }
-    private void clear(){
+
+    private void clear() {
         txtMaKM.setText("");
         txtTenSK.setText("");
         txtSoTienGiam.setText("");
+    }
+    private void enabled(){
+        txtMaKM.setEnabled(true);
+        txtTenSK.setEnabled(true);
+        txtSoTienGiam.setEnabled(true);
+        btnLuu.setEnabled(true);
+        btnSua.setEnabled(true);
+        btnXoa.setEnabled(true);
+    }
+    private void disabled(){
+        txtMaKM.setEnabled(false);
+        txtTenSK.setEnabled(false);
+        txtSoTienGiam.setEnabled(false);
+        btnLuu.setEnabled(false);
+        btnSua.setEnabled(false);
+        btnXoa.setEnabled(false);
     }
     private void showData(ArrayList<KhuyenMaiResponse> listKhuyenMaiResponses) {
         dtm = (DefaultTableModel) tblKhuyenMai.getModel();
@@ -41,12 +59,28 @@ public class KhuyenMai extends javax.swing.JPanel {
         for (KhuyenMaiResponse o : listKhuyenMaiResponses) {
             dtm.addRow(o.toDataRow());
         }
-
     }
 
     private domainModels.KhuyenMai getData() {
         domainModels.KhuyenMai k = new domainModels.KhuyenMai();
+        if(txtTenSK.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(this, "Tên sự kiện không được để trống");
+            return null;
+        }
         k.setTenSuKien(txtTenSK.getText());
+        if(txtSoTienGiam.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(this, "Tiền sự kiện không được để trống");
+            return null;
+        }
+        try{
+            double bien = Double.valueOf(txtSoTienGiam.getText());
+        }catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(this, "Tiền sự kiện không được Nhập chữ");
+        }
+        if(Double.parseDouble(txtSoTienGiam.getText()) <=0){
+            JOptionPane.showMessageDialog(this, "Tiền sự kiện không được nhỏ hơn không");
+            return null;
+        }
         String tien = txtSoTienGiam.getText();
         Double tienGiam = new Double(tien);
         BigDecimal tg = BigDecimal.valueOf(tienGiam);
@@ -185,6 +219,7 @@ public class KhuyenMai extends javax.swing.JPanel {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         clear();
+        enabled();
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void btnLuuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLuuActionPerformed
@@ -195,6 +230,10 @@ public class KhuyenMai extends javax.swing.JPanel {
     }//GEN-LAST:event_btnLuuActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
+        if(txtMaKM.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(this, "Mã sự kiện không được để trống");
+            return;
+        }
         String mess = khuyenMaiService.update(txtMaKM.getText(), getData());
         JOptionPane.showMessageDialog(this, mess);
         listKhuyenMaiResponses = khuyenMaiService.getAll();
@@ -202,6 +241,10 @@ public class KhuyenMai extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSuaActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        if(txtMaKM.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(this, "Mã sự kiện không được để trống");
+            return;
+        }
         String mess = khuyenMaiService.delete(txtMaKM.getText());
         JOptionPane.showMessageDialog(this, mess);
         listKhuyenMaiResponses = khuyenMaiService.getAll();

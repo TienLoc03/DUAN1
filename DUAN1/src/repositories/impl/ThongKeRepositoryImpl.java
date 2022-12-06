@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import repositories.ThongKeRepository;
 import utilies.DBConnection;
 import viewModels.ThongKeSPResponse;
+import viewModels.ThongKeSPResponse2;
 
 /**
  *
@@ -32,6 +33,27 @@ public class ThongKeRepositoryImpl implements ThongKeRepository {
                 listThongKeSPResponses.add(new ThongKeSPResponse(rs.getString(1), rs.getInt(2)));
             }
             return listThongKeSPResponses;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<ThongKeSPResponse2> getAll2() {
+        String sql = "SELECT Ngay,count(TenKhachHang) as SoLuong\n"
+                + "FROM     HoaDon\n"
+                + "where HoaDon.TrangThai = N'Đã thanh toán' group by HoaDon.Ngay";
+        ArrayList<ThongKeSPResponse2> listThongKeSP = new ArrayList<>();
+        try ( Connection con = DBConnection.getConnection();  PreparedStatement ps = con.prepareStatement(sql);) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ThongKeSPResponse2 tk = new ThongKeSPResponse2();
+                tk.setNgay(rs.getDate("Ngay"));
+                tk.setSoLuong(rs.getInt("SoLuong"));
+                listThongKeSP.add(tk);
+            }
+            return listThongKeSP;
         } catch (Exception e) {
             e.printStackTrace();
         }

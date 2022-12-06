@@ -4,9 +4,11 @@
  */
 package views;
 
+import domainModels.ChucVu;
 import domainModels.NhanVien;
 import java.awt.Image;
 import java.io.File;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +19,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import services.ChucVuService;
 import services.NhanVienService;
 import services.impl.ChucVuServiceImpl;
@@ -67,14 +71,16 @@ public class QLNV extends javax.swing.JPanel {
         cbbMaCV.setSelectedIndex(0);
         buttonGroup1.clearSelection();
         lbImages.setIcon(null);
-       txtNgaySinh.setDate(null);
+        txtNgaySinh.setDate(null);
     }
+
     private void clear2() {
         txt_Luong.setText("");
         txt_MaCV.setText("");
         txt_TenCV.setText("");
 
     }
+
     private void disabled() {
         txtTen.setEnabled(false);
         txtMaNV.setEnabled(false);
@@ -123,7 +129,7 @@ public class QLNV extends javax.swing.JPanel {
     private void loadCBB(ArrayList<ChucVuResponse> list) {
         boxModel = (DefaultComboBoxModel) cbbMaCV.getModel();
         for (ChucVuResponse o : list) {
-            cbbMaCV.addItem(o.getMaChucVu()+"");
+            cbbMaCV.addItem(o.getMaChucVu() + "");
         }
     }
 
@@ -169,7 +175,7 @@ public class QLNV extends javax.swing.JPanel {
 
     private void fillData2(int index) {
         ChucVuResponse c = list.get(index);
-        txt_MaCV.setText(c.getMaChucVu()+"");
+        txt_MaCV.setText(c.getMaChucVu() + "");
         txt_TenCV.setText(c.getTenChucVu());
         txt_Luong.setText(c.getLuong() + "");
     }
@@ -189,11 +195,31 @@ public class QLNV extends javax.swing.JPanel {
 
     private NhanVien getData() {
         NhanVien n = new NhanVien();
+        if (txtMaNV.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(this, "Mã nhân viên không được để trống");
+            return null;
+        }
         n.setMaNhanVien(txtMaNV.getText());
+        if (txtTen.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(this, "Tên nhân viên không được để trống");
+            return null;
+        }
         n.setTenNhanVien(txtTen.getText());
+        if (txtDiaChi.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(this, "Địa chỉ nhân viên không được để trống");
+            return null;
+        }
         n.setDiaChi(txtDiaChi.getText());
+        if (txtSDT.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(this, "SĐT nhân viên không được để trống");
+            return null;
+        }
         n.setSDT(txtSDT.getText());
         n.setMaChucVu((int) cbbMaCV.getSelectedItem());
+        if (txtNgaySinh.getDateFormatString().trim().equals("")) {
+            JOptionPane.showMessageDialog(this, "Ngày sinh nhân viên không được để trống");
+            return null;
+        }
         n.setNgaySinh(new java.sql.Date(txtNgaySinh.getDate().getTime()).toString());
         String gt = "Nam";
         if (rdoNam.isSelected()) {
@@ -210,6 +236,35 @@ public class QLNV extends javax.swing.JPanel {
         return n;
     }
 
+    private ChucVu getData2() {
+        ChucVu c = new ChucVu();
+        if (txt_TenCV.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(this, "Tên chức vụ không được để trống");
+            return null;
+        }
+        c.setTenChucVu(txt_TenCV.getText());
+        if (txt_Luong.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(this, "Lương chức vụ không được để trống");
+            return null;
+        }
+        try{
+            double bien = Double.valueOf(txt_Luong.getText());
+        }catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(this, "Lương chức vụ không được Nhập chữ");
+        }
+        if(Double.parseDouble(txt_Luong.getText()) <=0){
+            JOptionPane.showMessageDialog(this, "Lương chức vụ không được nhỏ hơn không");
+            return null;
+        }
+        double l = Double.valueOf(txt_Luong.getText());
+        c.setLuong(BigDecimal.valueOf(l));
+        return c;
+    }
+    private void filter(String query) {
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(dtm);
+        tblNhanVien.setRowSorter(tr);
+        tr.setRowFilter(RowFilter.regexFilter(query));
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -252,7 +307,7 @@ public class QLNV extends javax.swing.JPanel {
         btnThem = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         btnTimKiem = new javax.swing.JButton();
-        tfTimKiem = new javax.swing.JTextField();
+        txtTimKiem = new javax.swing.JTextField();
         jPanel23 = new javax.swing.JPanel();
         lbThongtin2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -322,7 +377,7 @@ public class QLNV extends javax.swing.JPanel {
         });
         jScrollPane6.setViewportView(tblNhanVien);
 
-        jPanel22.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 370, 910, 240));
+        jPanel22.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 370, 1090, 240));
 
         jPanel21.setBackground(new java.awt.Color(255, 255, 255));
         jPanel21.setForeground(new java.awt.Color(49, 139, 130));
@@ -551,7 +606,7 @@ public class QLNV extends javax.swing.JPanel {
                 .addComponent(btnSua)
                 .addGap(18, 18, 18)
                 .addComponent(btnXoa)
-                .addGap(0, 78, Short.MAX_VALUE))
+                .addGap(0, 20, Short.MAX_VALUE))
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -570,7 +625,14 @@ public class QLNV extends javax.swing.JPanel {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
         btnTimKiem.setForeground(new java.awt.Color(49, 139, 130));
+        btnTimKiem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/search_28px.png"))); // NOI18N
         btnTimKiem.setText("Tìm kiếm");
+
+        txtTimKiem.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtTimKiemKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -578,7 +640,7 @@ public class QLNV extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(33, 33, 33)
-                .addComponent(tfTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(btnTimKiem)
                 .addGap(20, 20, 20))
@@ -589,8 +651,8 @@ public class QLNV extends javax.swing.JPanel {
                 .addGap(9, 9, 9)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTimKiem)
-                    .addComponent(tfTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(18, Short.MAX_VALUE))
+                    .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel22.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 310, 440, 50));
@@ -701,18 +763,33 @@ public class QLNV extends javax.swing.JPanel {
         btn_Luu.setForeground(new java.awt.Color(49, 139, 130));
         btn_Luu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/save_28px.png"))); // NOI18N
         btn_Luu.setText("Lưu");
+        btn_Luu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_LuuActionPerformed(evt);
+            }
+        });
         jPanel23.add(btn_Luu, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 170, -1, -1));
 
         btn_Sua.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btn_Sua.setForeground(new java.awt.Color(49, 139, 130));
         btn_Sua.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/edit_28px.png"))); // NOI18N
         btn_Sua.setText("Sửa");
+        btn_Sua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_SuaActionPerformed(evt);
+            }
+        });
         jPanel23.add(btn_Sua, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 170, -1, -1));
 
         btn_Xoa.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btn_Xoa.setForeground(new java.awt.Color(49, 139, 130));
         btn_Xoa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Delete_28px.png"))); // NOI18N
         btn_Xoa.setText("Xóa nếu rỗng");
+        btn_Xoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_XoaActionPerformed(evt);
+            }
+        });
         jPanel23.add(btn_Xoa, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 230, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -738,13 +815,18 @@ public class QLNV extends javax.swing.JPanel {
         btn_XoaSP.setForeground(new java.awt.Color(49, 139, 130));
         btn_XoaSP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Delete_28px.png"))); // NOI18N
         btn_XoaSP.setText("Xóa Nhân viên trước");
+        btn_XoaSP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_XoaSPActionPerformed(evt);
+            }
+        });
         jPanel23.add(btn_XoaSP, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 430, -1, -1));
 
         jTabbedPane1.addTab("Quản lý chức vụ", jPanel23);
 
-        jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 620));
+        jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1090, 720));
 
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 620));
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1090, 720));
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblNhanVientblNhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblNhanVientblNhanVienMouseClicked
@@ -793,14 +875,22 @@ public class QLNV extends javax.swing.JPanel {
     }//GEN-LAST:event_btnLuuActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-        String mess = nhanVienService.update(listNhanVienResponses.get(tblNhanVien.getSelectedRow()).getMaNhanVien(), getData());
+        if (txtMaNV.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(this, "Mã nhân viên không được để trống");
+            return;
+        }
+        String mess = nhanVienService.update(txtMaNV.getText(), getData());
         listNhanVienResponses = nhanVienService.getAll();
         JOptionPane.showMessageDialog(this, mess);
         showData(listNhanVienResponses);
     }//GEN-LAST:event_btnSuaActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
-        String mess = nhanVienService.delete(listNhanVienResponses.get(tblNhanVien.getSelectedRow()).getMaNhanVien());
+        if (txtMaNV.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(this, "Mã nhân viên không được để trống");
+            return;
+        }
+        String mess = nhanVienService.delete(txtMaNV.getText());
         listNhanVienResponses = nhanVienService.getAll();
         JOptionPane.showMessageDialog(this, mess);
         showData(listNhanVienResponses);
@@ -812,6 +902,10 @@ public class QLNV extends javax.swing.JPanel {
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void btn_ShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ShowActionPerformed
+        if (txt_MaCV.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(this, "Mã nhân viên không được để trống");
+            return;
+        }
         String shownv = txt_MaCV.getText();
         show = nhanVienService.ShowNV(shownv);
         showData3(show);
@@ -825,6 +919,51 @@ public class QLNV extends javax.swing.JPanel {
         enabled2();
         clear2();
     }//GEN-LAST:event_btn_ThemActionPerformed
+
+    private void btn_SuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_SuaActionPerformed
+        if (txt_MaCV.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(this, "Mã chức vụ không được để trống");
+            return;
+        }
+        String mess = chucVuService.update(txt_MaCV.getText(), getData2());
+        list = chucVuService.getAll();
+        JOptionPane.showMessageDialog(this, mess);
+        showData2(list);
+    }//GEN-LAST:event_btn_SuaActionPerformed
+
+    private void btn_LuuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_LuuActionPerformed
+        String mess = chucVuService.add(getData2());
+        list = chucVuService.getAll();
+        JOptionPane.showMessageDialog(this, mess);
+        showData2(list);
+    }//GEN-LAST:event_btn_LuuActionPerformed
+
+    private void btn_XoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_XoaActionPerformed
+        if (txt_MaCV.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(this, "Mã chức vụ không được để trống");
+            return;
+        }
+        String mess = chucVuService.delete(txt_MaCV.getText());
+        list = chucVuService.getAll();
+        JOptionPane.showMessageDialog(this, mess);
+        showData2(list);
+    }//GEN-LAST:event_btn_XoaActionPerformed
+
+    private void btn_XoaSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_XoaSPActionPerformed
+        if(txt_MaNV.getText().equals("")){
+            JOptionPane.showMessageDialog(this, "Mã nhân viên không được để trống");
+            return;
+        }
+        String mess = chucVuService.delete(txt_MaNV.getText());
+        listNhanVienResponses = nhanVienService.getAll();
+        JOptionPane.showMessageDialog(this, mess);
+        showData(listNhanVienResponses);
+    }//GEN-LAST:event_btn_XoaSPActionPerformed
+
+    private void txtTimKiemKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKiemKeyReleased
+        String query = txtTimKiem.getText();
+        filter(query);
+    }//GEN-LAST:event_txtTimKiemKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -872,13 +1011,13 @@ public class QLNV extends javax.swing.JPanel {
     private javax.swing.JTable tblNhanVien;
     private javax.swing.JTable tbl_ChucVu;
     private javax.swing.JTable tbl_NhanVien;
-    private javax.swing.JTextField tfTimKiem;
     private javax.swing.JTextField txtDiaChi;
     private javax.swing.JTextField txtMaNV;
     private com.toedter.calendar.JDateChooser txtNgaySinh;
     private javax.swing.JTextField txtSDT;
     private javax.swing.JTextField txtTen;
     private javax.swing.JTextField txtTenChucVu;
+    private javax.swing.JTextField txtTimKiem;
     private javax.swing.JTextField txt_Luong;
     private javax.swing.JTextField txt_MaCV;
     private javax.swing.JTextField txt_MaNV;

@@ -85,9 +85,25 @@ public class Account extends javax.swing.JPanel {
 
     private TaiKhoan getData() {
         TaiKhoan t = new TaiKhoan();
-        t.setMaNV(txtMa.getText());
+        if(txtMa.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(this, "Mã tài khoản không được để trống");
+            return null;
+        }
+        t.setMaNV(txtTK.getText());
+        if(txtMa.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(this, "Tài khoản không được để trống");
+            return null;
+        }
         t.setTk(txtTK.getText());
+        if(txtMK.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(this, "Mật khẩu không được để trống");
+            return null;
+        }
         t.setMk(txtMK.getText());
+        if(txtEmail.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(this, "Email tài khoản không được để trống");
+            return null;
+        }
         t.setEmail(txtEmail.getText());
         String loai = "QL";
         if (cbbLoaiTK.getSelectedItem().equals("QL")) {
@@ -242,7 +258,11 @@ public class Account extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-        String mess = taiKhoanService.update(listTaiKhoanResponses.get(tblTaiKhoan.getSelectedRow()).getMaNV(), getData());
+        if(txtMa.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(this, "Mã tài khoản không được để trống");
+            return;
+        }
+        String mess = taiKhoanService.update(txtMa.getText(), getData());
         JOptionPane.showMessageDialog(this, mess);
         listTaiKhoanResponses = taiKhoanService.getAll();
         showData(listTaiKhoanResponses);
@@ -268,6 +288,10 @@ public class Account extends javax.swing.JPanel {
     }//GEN-LAST:event_btnLuuActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        if(txtMa.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(this, "Mã tài khoản không được để trống");
+            return;
+        }
         String mess = taiKhoanService.delete(listTaiKhoanResponses.get(tblTaiKhoan.getSelectedRow()).getMaNV());
         JOptionPane.showMessageDialog(this, mess);
         listTaiKhoanResponses = taiKhoanService.getAll();

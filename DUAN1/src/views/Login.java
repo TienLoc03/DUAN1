@@ -21,7 +21,6 @@ public class Login extends javax.swing.JFrame {
 
     private ArrayList<TaiKhoanResponse> listTaiKhoanResponses = new ArrayList<>();
     private TaiKhoanService taiKhoanService = new TaiKhoanServiceImpl();
-    
 
     /**
      * Creates new form Login
@@ -94,6 +93,7 @@ public class Login extends javax.swing.JFrame {
         txtPassword = new javax.swing.JPasswordField();
         chkbNhoMatKhau = new javax.swing.JCheckBox();
         btnQuenMk = new javax.swing.JButton();
+        btnDoiMk = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -143,14 +143,18 @@ public class Login extends javax.swing.JFrame {
 
         btnQuenMk.setForeground(new java.awt.Color(49, 139, 130));
         btnQuenMk.setText("Quên mật khẩu");
-        btnQuenMk.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnQuenMkMouseClicked(evt);
-            }
-        });
         btnQuenMk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnQuenMkActionPerformed(evt);
+            }
+        });
+
+        btnDoiMk.setBackground(new java.awt.Color(49, 139, 130));
+        btnDoiMk.setForeground(new java.awt.Color(255, 255, 255));
+        btnDoiMk.setText("Đổi mật khẩu");
+        btnDoiMk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDoiMkActionPerformed(evt);
             }
         });
 
@@ -162,11 +166,6 @@ public class Login extends javax.swing.JFrame {
                 .addGap(45, 45, 45)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(btnDangNhap)
-                        .addGap(37, 37, 37)
-                        .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -174,13 +173,20 @@ public class Login extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(chkbNhoMatKhau)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnQuenMk))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(15, 15, 15)
                                 .addComponent(jLabel3))
-                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(chkbNhoMatKhau)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnDoiMk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnQuenMk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addComponent(btnDangNhap)
+                        .addGap(37, 37, 37)
+                        .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -201,10 +207,12 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(chkbNhoMatKhau)
                     .addComponent(btnQuenMk, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnDoiMk, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(127, Short.MAX_VALUE))
+                    .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(86, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 0, 400, 410));
@@ -251,10 +259,10 @@ public class Login extends javax.swing.JFrame {
             if (role != null) {
                 JOptionPane.showMessageDialog(this, "Login Succesfully");
                 if (role.equalsIgnoreCase("NV")) {
-                    QLNhanVien nv = new QLNhanVien();
+                    QLNhanVien nv = new QLNhanVien(txtUserName.getText());
                     nv.setVisible(true);
                 } else if (role.equalsIgnoreCase("QL")) {
-                    QLQuanLy QL = new QLQuanLy();
+                    QLQuanLy QL = new QLQuanLy(txtUserName.getText());
                     QL.setVisible(true);
                 }
                 this.dispose();
@@ -262,7 +270,7 @@ public class Login extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Login Failed");
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Ban chua nhap ten dang nhap hoac mat khau");
+            JOptionPane.showMessageDialog(this, "Bạn chưa nhập tên đăng nhập hoặc mật khẩu");
         }
     }//GEN-LAST:event_btnDangNhapMouseClicked
 
@@ -273,15 +281,18 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnThoatMouseClicked
 
-    private void btnQuenMkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnQuenMkMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnQuenMkMouseClicked
-
     private void btnQuenMkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuenMkActionPerformed
         SendCode s = new SendCode();
         s.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnQuenMkActionPerformed
+
+    private void btnDoiMkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoiMkActionPerformed
+        DoiMK d = new DoiMK();
+        d.setVisible(true);
+        System.out.println("Hello");
+        this.dispose();
+    }//GEN-LAST:event_btnDoiMkActionPerformed
 
     /**
      * @param args the command line arguments
@@ -320,6 +331,7 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDangNhap;
+    private javax.swing.JButton btnDoiMk;
     private javax.swing.JButton btnQuenMk;
     private javax.swing.JButton btnThoat;
     private javax.swing.JCheckBox chkbNhoMatKhau;

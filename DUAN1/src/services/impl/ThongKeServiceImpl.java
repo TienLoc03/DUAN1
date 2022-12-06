@@ -9,17 +9,24 @@ import repositories.ThongKeRepository;
 import repositories.impl.ThongKeRepositoryImpl;
 import services.ThongKeService;
 import viewModels.ThongKeSPResponse;
+import viewModels.ThongKeSPResponse2;
 
 /**
  *
  * @author ASUS
  */
-public class ThongKeServiceImpl implements ThongKeService{
+public class ThongKeServiceImpl implements ThongKeService {
+
     private ThongKeRepository TKRepo = new ThongKeRepositoryImpl();
-    
+
     @Override
     public ArrayList<ThongKeSPResponse> getAll() {
         return TKRepo.getAll();
     }
-    
+
+    @Override
+    public ArrayList<ThongKeSPResponse2> getAll2() {
+        return TKRepo.getAll2();
+    }
+
 }

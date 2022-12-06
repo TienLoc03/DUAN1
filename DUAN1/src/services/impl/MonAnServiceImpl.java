@@ -25,29 +25,29 @@ public class MonAnServiceImpl implements MonAnService {
     }
 
     @Override
-    public String add(MonAn monAn) {
+    public String add(MonAn monAn) { 
         if (MARepo.add(monAn)) {
-            return "Thành công";
+            return "Lưu thành công";
         } else {
-            return "Thất bại";
+            return "Lưu thất bại";
         }
     }
 
     @Override
     public String update(String MaMA, MonAn monAn) {
         if (MARepo.update(MaMA, monAn)) {
-            return "Thành công";
+            return "Sửa thành công";
         } else {
-            return "Thất bại";
+            return "Sửa thất bại";
         }
     }
 
     @Override
     public String delete(String MaMA) {
         if (MARepo.delete(MaMA)) {
-            return "Thành công";
+            return "Xóa thành công";
         } else {
-            return "Thất bại";
+            return "Xóa thất bại";
         }
     }
 

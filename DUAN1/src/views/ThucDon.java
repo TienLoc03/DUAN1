@@ -189,9 +189,17 @@ public class ThucDon extends javax.swing.JPanel {
     }
 
     private MonAn getData() {
-        MonAn m = new MonAn();
+        MonAn m = new MonAn();       
         m.setMaLoaiMon(Integer.parseInt((String) cbbMaLoaiMon.getSelectedItem()));
+        if(txtTenMon.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(this, "Tên món ăn không được để trống");
+            return null;
+        }
         m.setTenMonAn(txtTenMon.getText());
+        if(txtDonVi.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(this, "Đơn vị món ăn không được để trống");
+            return null;
+        }
         m.setDonVi(txtDonVi.getText());
         String tt = "Còn";
         if (rdoCon.isSelected()) {
@@ -199,6 +207,19 @@ public class ThucDon extends javax.swing.JPanel {
         } else {
             tt = "Hết";
             m.setTrangThai(tt);
+        }
+        if(txtGiaTien.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(this, "Giá món ăn không được để trống");
+            return null;
+        }
+        try{
+            double bien = Double.valueOf(txtGiaTien.getText());
+        }catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(this, "Giá món ăn không được Nhập chữ");
+        }
+        if(Double.parseDouble(txtGiaTien.getText()) <=0){
+            JOptionPane.showMessageDialog(this, "Giá món ăn không được nhỏ hơn không");
+            return null;
         }
         m.setGiaTien(Double.parseDouble(txtGiaTien.getText()));
         if (strHinhAnh == null) {
@@ -208,9 +229,15 @@ public class ThucDon extends javax.swing.JPanel {
         }
         return m;
     }
-
+    private void kiemtra(){
+        
+    }
     private DanhMuc getData2() {
         DanhMuc d = new DanhMuc();
+        if(txt_TenLoaiMon.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(this, "Tên món ăn không được để trống");
+            return null;
+        }
         d.setTenLoaiMon(txt_TenLoaiMon.getText());
         return d;
     }
@@ -869,6 +896,10 @@ public class ThucDon extends javax.swing.JPanel {
     }//GEN-LAST:event_btnLuuActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
+        if(txtMaMon.getText().equals("")){
+           JOptionPane.showMessageDialog(this, "chọn mã món để Sửa"); 
+           return;
+        }
         String mess = monAnService.update(txtMaMon.getText(), getData());
         JOptionPane.showMessageDialog(this, mess);
         listMonAnResponses = monAnService.getAll();
@@ -876,7 +907,11 @@ public class ThucDon extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSuaActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
-        String mess = monAnService.delete(listMonAnResponses.get(tblThucDon.getSelectedRow()).getMaMonAn() + "");
+        if(txtMaMon.getText().equals("")){
+           JOptionPane.showMessageDialog(this, "chọn mã món để xóa"); 
+           return;
+        }
+        String mess = monAnService.delete(txtMaMon.getText());
         JOptionPane.showMessageDialog(this, mess);
         listMonAnResponses = monAnService.getAll();
         showData(listMonAnResponses);
@@ -907,6 +942,10 @@ public class ThucDon extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_ThemActionPerformed
 
     private void btn_ShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ShowActionPerformed
+        if(txt_MaLoaiMon.getText().equals("")){
+           JOptionPane.showMessageDialog(this, "chọn mã loại món để show"); 
+           return;
+        }
         String show = txt_MaLoaiMon.getText();
         listShow = monAnService.ShowMA(show);
         showData2(listShow);
@@ -920,6 +959,10 @@ public class ThucDon extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_LuuActionPerformed
 
     private void btn_SuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_SuaActionPerformed
+        if(txt_MaLoaiMon.getText().equals("")){
+           JOptionPane.showMessageDialog(this, "chọn mã loại món để sửa"); 
+           return;
+        }
         String mess = danhMucService.update(txt_MaLoaiMon.getText(), getData2());
         JOptionPane.showMessageDialog(this, mess);
         listDanhMucResponses = danhMucService.getAll();
@@ -927,13 +970,21 @@ public class ThucDon extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_SuaActionPerformed
 
     private void btn_XoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_XoaActionPerformed
-        String mess = danhMucService.delete(listDanhMucResponses.get(tbl_LoaiMonAn.getSelectedRow()).getMaLoaiMon() + "");
+        if(txt_MaLoaiMon.getText().equals("")){
+           JOptionPane.showMessageDialog(this, "chọn mã loại món để xóa"); 
+           return;
+        }
+        String mess = danhMucService.delete(txt_MaLoaiMon.getText());
         JOptionPane.showMessageDialog(this, mess);
         listDanhMucResponses = danhMucService.getAll();
         showData1(listDanhMucResponses);
     }//GEN-LAST:event_btn_XoaActionPerformed
 
     private void btn_XoaSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_XoaSPActionPerformed
+        if(txt_MMA.getText().equals("")){
+           JOptionPane.showMessageDialog(this, "chọn mã món ăn để xóa"); 
+           return;
+        }
         String mess = monAnService.delete(txt_MMA.getText());
         JOptionPane.showMessageDialog(this, mess);
         listShow = monAnService.getAll();

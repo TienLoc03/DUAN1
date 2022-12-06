@@ -6,6 +6,7 @@ package services;
 
 import java.util.ArrayList;
 import viewModels.ThongKeSPResponse;
+import viewModels.ThongKeSPResponse2;
 
 /**
  *
@@ -13,4 +14,5 @@ import viewModels.ThongKeSPResponse;
  */
 public interface ThongKeService {
     ArrayList<ThongKeSPResponse> getAll();
+    ArrayList<ThongKeSPResponse2> getAll2();
 }
